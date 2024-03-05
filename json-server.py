@@ -2,10 +2,25 @@ import json
 from http.server import HTTPServer
 from handler import HandleRequests, status
 
-from views import login_user, create_user
+from views import login_user, create_user, list_posts, retrieve_post
 
 
 class JSONServer(HandleRequests):
+
+    def do_GET(self):
+        """Handle GET requests from a client"""
+
+        response_body = ""
+        url = self.parse_url(self.path)
+
+        if url["requested_resource"] == "posts":
+            if url["pk"] != 0:
+                response_body = retrieve_post(url["pk"])
+                return self.response(response_body, status.HTTP_200_SUCCESS.value)
+
+            response_body = list_posts()
+            return self.response(response_body, status.HTTP_200_SUCCESS.value)
+
     def do_POST(self):
         """Handle POST requests from a client"""
         url = self.parse_url(self.path)
