@@ -2,7 +2,7 @@ import json
 from http.server import HTTPServer
 from handler import HandleRequests, status
 
-from views import login_user, create_user
+from views import login_user, create_user, get_categories
 
 
 class JSONServer(HandleRequests):
@@ -23,6 +23,18 @@ class JSONServer(HandleRequests):
 
             else:
                 return self.response("", status.HTTP_500_SERVER_ERROR.value)
+
+    def do_GET(self):
+        """Handle GET requests from a client"""
+
+        response_body = ""
+        url = self.parse_url(self.path)
+
+        if url["requested_resource"] == "categories":
+            response_body = get_categories()
+            return self.response(response_body, status.HTTP_200_SUCCESS.value)
+
+        return self.response("", status.HTTP_404_CLIENT_ERROR_RESOURCE_NOT_FOUND.value)
 
 
 def main():
