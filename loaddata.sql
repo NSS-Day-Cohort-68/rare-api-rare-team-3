@@ -89,3 +89,30 @@ CREATE TABLE "Categories" (
 INSERT INTO Categories ('label') VALUES ('News');
 INSERT INTO Tags ('label') VALUES ('JavaScript');
 INSERT INTO Reactions ('label', 'image_url') VALUES ('happy', 'https://pngtree.com/so/happy');
+
+
+-- Add posts to test get functionailty
+INSERT INTO Posts ("user_id", "category_id", "title", "publication_date", "image_url", "content", "approved")
+VALUES (1, 2, 'First Post', '2024-03-05', NULL, 'Lorem ipsum content for the first post.', 1);
+
+INSERT INTO Posts ("user_id", "category_id", "title", "publication_date", "image_url", "content", "approved")
+VALUES (2, 3, 'Second Post', '2024-03-06', NULL, 'Lorem ipsum content for the second post.', 1);
+
+INSERT INTO Posts ("user_id", "category_id", "title", "publication_date", "image_url", "content", "approved")
+VALUES (3, 1, 'Third Post', '2024-03-07', NULL, 'Lorem ipsum content for the third post.', 0);
+
+-- Add users to join in get Posts fetch
+INSERT INTO "Users" ("first_name", "last_name", "email", "bio", "username", "password", "profile_image_url", "created_on", "active")
+VALUES ('John', 'Doe', 'john@example.com', 'Web developer', 'john_doe', 'hashed_password_1', NULL, '2024-03-05', 1);
+
+INSERT INTO "Users" ("first_name", "last_name", "email", "bio", "username", "password", "profile_image_url", "created_on", "active")
+VALUES ('Jane', 'Smith', 'jane@example.com', 'Software engineer', 'jane_smith', 'hashed_password_2', NULL, '2024-03-06', 1);
+
+INSERT INTO "Users" ("first_name", "last_name", "email", "bio", "username", "password", "profile_image_url", "created_on", "active")
+VALUES ('Bob', 'Johnson', 'bob@example.com', 'UX designer', 'bob_johnson', 'hashed_password_3', NULL, '2024-03-07', 0);
+
+INSERT INTO "Categories" ("label")
+VALUES ('Sports');
+
+INSERT INTO "Categories" ("label")
+VALUES ('Science');
