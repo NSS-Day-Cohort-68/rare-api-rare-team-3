@@ -88,3 +88,8 @@ CREATE TABLE "Categories" (
 INSERT INTO Categories ('label') VALUES ('News');
 INSERT INTO Tags ('label') VALUES ('JavaScript');
 INSERT INTO Reactions ('label', 'image_url') VALUES ('happy', 'https://pngtree.com/so/happy');
+
+
+
+INSERT INTO Posts ('user_id', 'category_id', 'title', 'publication_date', 'image_url', 'content', 'approved')
+VALUES (1, 1, "This is a title", "2024-03-04 15:14:13.180700", null, "This is the body of the post", 1)
