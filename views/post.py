@@ -2,7 +2,7 @@ import sqlite3
 import json
 
 
-def get_single_post(pk, url):
+def get_posts_by_user(pk, url):
     # Open connection with the database
     with sqlite3.connect("./db.sqlite3") as conn:
         conn.row_factory = sqlite3.Row
@@ -10,7 +10,7 @@ def get_single_post(pk, url):
 
         # Check to see if _expand query parameter exists
         if "_expand" in url.get("query_params"):
-            # write SQL to get the post by id and join tables of both FKs
+            # write SQL to get the posts by user id and join tables of both FKs
             db_cursor.execute(
                 """
             SELECT
@@ -39,51 +39,56 @@ def get_single_post(pk, url):
                 ON u.id = p.user_id
             JOIN Categories c
                 ON c.id = p.category_id
-            WHERE p.id = ?
+            WHERE p.user_id = ?
             """,
                 (pk,),
             )
-            query_results = db_cursor.fetchone()
+            query_results = db_cursor.fetchall()
 
-            # Make nested object
-            user = {
-                "id": query_results["u_id"],
-                "first_name": query_results["first_name"],
-                "last_name": query_results["last_name"],
-                "email": query_results["email"],
-                "bio": query_results["bio"],
-                "username": query_results["username"],
-                "password": query_results["password"],
-                "profile_image_url": query_results["profile_image_url"],
-                "created_on": query_results["created_on"],
-                "active": query_results["active"],
-            }
+            # Initialize an empty list and then add each dictionary to it
+            posts = []
 
-            category = {
-                "id": query_results["category_id"],
-                "label": query_results["label"],
-            }
+            for row in query_results:
+                user = {
+                    "id": row["u_id"],
+                    "first_name": row["first_name"],
+                    "last_name": row["last_name"],
+                    "email": row["email"],
+                    "bio": row["bio"],
+                    "username": row["username"],
+                    "password": row["password"],
+                    "profile_image_url": row["profile_image_url"],
+                    "created_on": row["created_on"],
+                    "active": row["active"],
+                }
 
-            post = {
-                "id": query_results["p_id"],
-                "user_id": query_results["user_id"],
-                "user": user,
-                "category_id": query_results["category_id"],
-                "category": category,
-                "title": query_results["title"],
-                "publication_date": query_results["publication_date"],
-                "image_url": query_results["image_url"],
-                "content": query_results["content"],
-                "approved": query_results["approved"],
-            }
+                category = {
+                    "id": row["category_id"],
+                    "label": row["label"],
+                }
+
+                post = {
+                    "id": row["p_id"],
+                    "user_id": row["user_id"],
+                    "user": user,
+                    "category_id": row["category_id"],
+                    "category": category,
+                    "title": row["title"],
+                    "publication_date": row["publication_date"],
+                    "image_url": row["image_url"],
+                    "content": row["content"],
+                    "approved": row["approved"],
+                }
+
+                posts.append(post)
 
             # Serialize Python list to JSON encoded string
-            serialized_post = json.dumps(dict(post))
+            serialized_posts = json.dumps(posts)
 
-            return serialized_post
+            return serialized_posts
 
         else:
-            # Write the SQL query to get single post by id
+            # Write the SQL query to get posts by user id
             db_cursor.execute(
                 """
             SELECT
@@ -96,14 +101,20 @@ def get_single_post(pk, url):
                 p.content, 
                 p.approved
             FROM Posts p
-            WHERE p.id = ?
+            WHERE p.user_id = ?
             """,
                 (pk,),
             )
 
-            query_results = db_cursor.fetchone()
+            query_results = db_cursor.fetchall()
+
+            # Initialize an empty list and then add each dictionary to it
+            posts = []
+
+            for row in query_results:
+                posts.append(dict(row))
 
             # Serialize Python list to JSON encoded string
-            serialized_post = json.dumps(dict(query_results))
+            serialized_posts = json.dumps(posts)
 
-            return serialized_post
+            return serialized_posts

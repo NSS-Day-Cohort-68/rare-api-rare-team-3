@@ -3,7 +3,7 @@ from http.server import HTTPServer
 from handler import HandleRequests, status
 
 from views import login_user, create_user
-from views import get_single_post
+from views import get_posts_by_user
 
 
 class JSONServer(HandleRequests):
@@ -31,10 +31,11 @@ class JSONServer(HandleRequests):
         response_body = ""
         url = self.parse_url(self.path)
 
-        if url["requested_resource"] == "posts":
-            if url["pk"] != 0:
-                response_body = get_single_post(url["pk"], url)
-                return self.response(response_body, status.HTTP_200_SUCCESS.value)
+        # Check if the request includes a user ID to get posts by that user
+        if "user_id" in url.get("query_params"):
+            user_id = int(url["query_params"]["user_id"][0])
+            posts_by_user = get_posts_by_user(user_id, url)
+            return self.response(posts_by_user, status.HTTP_200_SUCCESS.value)
 
         else:
             return self.response(

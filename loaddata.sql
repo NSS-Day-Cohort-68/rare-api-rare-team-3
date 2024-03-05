@@ -93,13 +93,16 @@ INSERT INTO Reactions ('label', 'image_url') VALUES ('happy', 'https://pngtree.c
 
 -- Add posts to test get functionailty
 INSERT INTO Posts ("user_id", "category_id", "title", "publication_date", "image_url", "content", "approved")
-VALUES (1, 2, 'First Post', '2024-03-05', NULL, 'Lorem ipsum content for the first post.', 1);
+VALUES (2, 2, 'First Post', '2024-03-05', NULL, 'Lorem ipsum content for the first post.', 1);
 
 INSERT INTO Posts ("user_id", "category_id", "title", "publication_date", "image_url", "content", "approved")
-VALUES (2, 3, 'Second Post', '2024-03-06', NULL, 'Lorem ipsum content for the second post.', 1);
+VALUES (3, 1, 'Second Post', '2024-03-06', NULL, 'Lorem ipsum content for the second post.', 1);
 
 INSERT INTO Posts ("user_id", "category_id", "title", "publication_date", "image_url", "content", "approved")
-VALUES (3, 1, 'Third Post', '2024-03-07', NULL, 'Lorem ipsum content for the third post.', 0);
+VALUES (1, 3, 'Third Post', '2024-03-07', NULL, 'Lorem ipsum content for the third post.', 0);
+
+INSERT INTO Posts ("user_id", "category_id", "title", "publication_date", "image_url", "content", "approved")
+VALUES (1, 2, 'Third Post', '2024-03-07', NULL, 'Lorem ipsum content for the fourth post.', 1);
 
 -- Add users to join in get Posts fetch
 INSERT INTO "Users" ("first_name", "last_name", "email", "bio", "username", "password", "profile_image_url", "created_on", "active")
@@ -111,6 +114,7 @@ VALUES ('Jane', 'Smith', 'jane@example.com', 'Software engineer', 'jane_smith', 
 INSERT INTO "Users" ("first_name", "last_name", "email", "bio", "username", "password", "profile_image_url", "created_on", "active")
 VALUES ('Bob', 'Johnson', 'bob@example.com', 'UX designer', 'bob_johnson', 'hashed_password_3', NULL, '2024-03-07', 0);
 
+-- Add categories to join in get Posts fetch
 INSERT INTO "Categories" ("label")
 VALUES ('Sports');
 
