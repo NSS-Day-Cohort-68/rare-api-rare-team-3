@@ -2,7 +2,7 @@ import json
 from http.server import HTTPServer
 from handler import HandleRequests, status
 
-from views import login_user, create_user, get_categories
+from views import login_user, create_user, get_categories, create_category
 
 
 class JSONServer(HandleRequests):
@@ -18,6 +18,15 @@ class JSONServer(HandleRequests):
         if url["requested_resource"] == "users":
             if pk == 0:
                 successfully_posted = create_user(request_body)
+                if successfully_posted:
+                    return self.response("", status.HTTP_201_SUCCESS_CREATED.value)
+
+            else:
+                return self.response("", status.HTTP_500_SERVER_ERROR.value)
+
+        elif url["requested_resource"] == "categories":
+            if pk == 0:
+                successfully_posted = create_category(request_body)
                 if successfully_posted:
                     return self.response("", status.HTTP_201_SUCCESS_CREATED.value)
 
