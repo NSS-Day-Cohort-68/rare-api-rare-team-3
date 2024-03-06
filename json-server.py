@@ -5,7 +5,7 @@ from handler import HandleRequests, status
 from views import login_user, create_user
 from views import get_categories, create_category
 from views import get_posts, get_posts_by_user, retrieve_post
-from views import get_comments_by_post_id
+from views import get_comments_by_post_id, create_comment
 
 
 class JSONServer(HandleRequests):
@@ -41,9 +41,15 @@ class JSONServer(HandleRequests):
                         "", status.HTTP_404_CLIENT_ERROR_RESOURCE_NOT_FOUND.value
                     )
 
-        # elif url["request_resource"] == "comments":
-        #     if pk == 0:
-        #         successfully_posted = create_comment()
+        elif url["request_resource"] == "comments":
+            if pk == 0:
+                successfully_posted = create_comment(request_body)
+                if successfully_posted:
+                    return self.response("", status.HTTP_201_SUCCESS_CREATED.value)
+                else:
+                    return self.response(
+                        "", status.HTTP_404_CLIENT_ERROR_RESOURCE_NOT_FOUND.value
+                    )
 
         else:
             return self.response("", status.HTTP_500_SERVER_ERROR.value)
