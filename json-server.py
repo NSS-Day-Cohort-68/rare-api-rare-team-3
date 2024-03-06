@@ -6,6 +6,7 @@ from views import login_user, create_user
 from views import get_categories, create_category
 from views import get_posts, get_posts_by_user, retrieve_post
 from views import get_comments_by_post_id
+from views import create_tag
 
 
 class JSONServer(HandleRequests):
@@ -40,8 +41,24 @@ class JSONServer(HandleRequests):
                     return self.response(
                         "", status.HTTP_404_CLIENT_ERROR_RESOURCE_NOT_FOUND.value
                     )
+
+        elif url["requested_resource"] == "tags":
+            if pk == 0:
+                try:
+                    successfully_posted = create_tag(request_body)
+                    if successfully_posted:
+                        return self.response("", status.HTTP_201_SUCCESS_CREATED.value)
+
+                except KeyError:
+                    return self.response(
+                        "Error creating tag: Invalid data format. Need a label",
+                        status.HTTP_400_CLIENT_ERROR_BAD_REQUEST_DATA.value,
+                    )
         else:
-            return self.response("", status.HTTP_500_SERVER_ERROR.value)
+            return self.response(
+                "Requested resource not found",
+                status.HTTP_404_CLIENT_ERROR_RESOURCE_NOT_FOUND.value,
+            )
 
     def do_GET(self):
         response_body = ""
