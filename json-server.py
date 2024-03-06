@@ -41,11 +41,12 @@ class JSONServer(HandleRequests):
                         "", status.HTTP_404_CLIENT_ERROR_RESOURCE_NOT_FOUND.value
                     )
 
-        elif url["request_resource"] == "comments":
+        elif url["requested_resource"] == "comments":
             if pk == 0:
                 successfully_posted = create_comment(request_body)
                 if successfully_posted:
                     return self.response("", status.HTTP_201_SUCCESS_CREATED.value)
+
                 else:
                     return self.response(
                         "", status.HTTP_404_CLIENT_ERROR_RESOURCE_NOT_FOUND.value
