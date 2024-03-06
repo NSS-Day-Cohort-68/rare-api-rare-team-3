@@ -4,11 +4,12 @@ from handler import HandleRequests, status
 
 from views import login_user, create_user
 from views import get_categories, create_category
-from views import get_posts
+from views import get_posts, get_posts_by_user, retrieve_post
 from views import get_comments_by_post_id
 
 
 class JSONServer(HandleRequests):
+
     def do_POST(self):
         """Handle POST requests from a client"""
         url = self.parse_url(self.path)
@@ -47,6 +48,15 @@ class JSONServer(HandleRequests):
         url = self.parse_url(self.path)
 
         if url["requested_resource"] == "posts":
+            if "user_id" in url.get("query_params"):
+                user_id = int(url["query_params"]["user_id"][0])
+                posts_by_user = get_posts_by_user(user_id, url)
+                return self.response(posts_by_user, status.HTTP_200_SUCCESS.value)
+
+            elif url["pk"] != 0:
+                response_body = retrieve_post(url["pk"])
+                return self.response(response_body, status.HTTP_200_SUCCESS.value)
+
             response_body = get_posts()
             return self.response(response_body, status.HTTP_200_SUCCESS.value)
 
