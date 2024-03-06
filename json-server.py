@@ -5,6 +5,7 @@ from handler import HandleRequests, status
 from views import login_user, create_user
 from views import get_categories, create_category
 from views import get_posts, get_posts_by_user, retrieve_post
+from views import get_comments_by_post_id
 
 
 class JSONServer(HandleRequests):
@@ -61,6 +62,10 @@ class JSONServer(HandleRequests):
 
         elif url["requested_resource"] == "categories":
             response_body = get_categories()
+            return self.response(response_body, status.HTTP_200_SUCCESS.value)
+
+        elif url["requested_resource"] == "comments":
+            response_body = get_comments_by_post_id(url)
             return self.response(response_body, status.HTTP_200_SUCCESS.value)
 
         else:
