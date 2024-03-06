@@ -2,14 +2,10 @@ import json
 from http.server import HTTPServer
 from handler import HandleRequests, status
 
-from views import (
-    login_user,
-    create_user,
-    get_categories,
-    create_category,
-    get_posts,
-    create_comment,
-)
+from views import login_user, create_user
+from views import get_categories, create_category
+from views import get_posts
+from views import get_comments_by_post_id
 
 
 class JSONServer(HandleRequests):
@@ -32,10 +28,6 @@ class JSONServer(HandleRequests):
                     return self.response(
                         "", status.HTTP_404_CLIENT_ERROR_RESOURCE_NOT_FOUND.value
                     )
-
-        # if url["request_resource"] == "comments":
-        #     if pk == 0:
-        #         successfully_posted = create_comment()
 
         elif url["requested_resource"] == "categories":
             if pk == 0:
@@ -60,6 +52,10 @@ class JSONServer(HandleRequests):
 
         elif url["requested_resource"] == "categories":
             response_body = get_categories()
+            return self.response(response_body, status.HTTP_200_SUCCESS.value)
+
+        elif url["requested_resource"] == "comments":
+            response_body = get_comments_by_post_id(url)
             return self.response(response_body, status.HTTP_200_SUCCESS.value)
 
         else:

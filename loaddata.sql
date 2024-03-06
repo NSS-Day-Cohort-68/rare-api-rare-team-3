@@ -92,8 +92,14 @@ INSERT INTO Reactions ('label', 'image_url') VALUES ('happy', 'https://pngtree.c
 
 
 INSERT INTO Posts ('user_id', 'category_id', 'title', 'publication_date', 'image_url', 'content', 'approved')
-VALUES (1, 1, "This is a title", "2024-03-04 15:14:13.180700", null, "This is the body of the post", 1)
+VALUES (1, 1, "This is a title", "2024-03-04 15:14:13.180700", null, "This is the body of the post", 1);
 
 
 INSERT INTO Comments ('post_id', 'author_id', 'content')
-VALUES (1, 1, "This is such a funny comment!")
+VALUES (1, 1, "This is such a funny comment!");
+
+INSERT INTO Comments ('post_id', 'author_id', 'content')
+VALUES (2, 2, "BLAH BLAH BLAH");
+
+INSERT INTO Comments ('post_id', 'author_id', 'content')
+VALUES (1, 1, "test test test");
