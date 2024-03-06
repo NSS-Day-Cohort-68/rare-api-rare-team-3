@@ -4,9 +4,11 @@ from handler import HandleRequests, status
 
 from views import login_user, create_user
 from views import get_categories, create_category
-from views import get_posts, get_posts_by_user
+from views import get_posts, get_posts_by_user, retrieve_post
+
 
 class JSONServer(HandleRequests):
+
     def do_POST(self):
         """Handle POST requests from a client"""
         url = self.parse_url(self.path)
@@ -49,7 +51,11 @@ class JSONServer(HandleRequests):
                 user_id = int(url["query_params"]["user_id"][0])
                 posts_by_user = get_posts_by_user(user_id, url)
                 return self.response(posts_by_user, status.HTTP_200_SUCCESS.value)
-    
+
+            elif url["pk"] != 0:
+                response_body = retrieve_post(url["pk"])
+                return self.response(response_body, status.HTTP_200_SUCCESS.value)
+
             response_body = get_posts()
             return self.response(response_body, status.HTTP_200_SUCCESS.value)
 
@@ -61,6 +67,7 @@ class JSONServer(HandleRequests):
             return self.response(
                 "", status.HTTP_404_CLIENT_ERROR_RESOURCE_NOT_FOUND.value
             )
+
 
 def main():
     host = ""
