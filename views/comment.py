@@ -7,8 +7,6 @@ def get_comments_by_post_id(url):
         conn.row_factory = sqlite3.Row
         db_cursor = conn.cursor()
 
-        print(url["query_params"]["_post_id"][0])
-
         if "_post_id" in url["query_params"]:
             db_cursor.execute(
                 """
@@ -47,3 +45,33 @@ def get_comments_by_post_id(url):
                 comments.append(comment)
 
             return json.dumps(comments)
+
+
+def create_comment(comment_data):
+    with sqlite3.connect("./db.sqlite3") as conn:
+        conn.row_factory = sqlite3.Row
+        db_cursor = conn.cursor()
+
+        db_cursor.execute(
+            """
+                INSERT INTO Comments
+                    (
+                        post_id,
+                        author_id,
+                        content
+                    )
+                        VALUES
+                    (
+                        ?,
+                        ?,
+                        ?
+                    )
+            """,
+            (
+                comment_data["post_id"],
+                comment_data["author_id"],
+                comment_data["content"],
+            ),
+        )
+
+        return True if db_cursor.rowcount > 0 else False

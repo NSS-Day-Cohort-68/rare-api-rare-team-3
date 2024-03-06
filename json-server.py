@@ -40,6 +40,11 @@ class JSONServer(HandleRequests):
                     return self.response(
                         "", status.HTTP_404_CLIENT_ERROR_RESOURCE_NOT_FOUND.value
                     )
+
+        # elif url["request_resource"] == "comments":
+        #     if pk == 0:
+        #         successfully_posted = create_comment()
+
         else:
             return self.response("", status.HTTP_500_SERVER_ERROR.value)
 
