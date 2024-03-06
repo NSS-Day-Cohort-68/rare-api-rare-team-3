@@ -226,3 +226,24 @@ INSERT INTO "Categories" ("label")
 VALUES ('Sports');
 INSERT INTO "Categories" ("label")
 VALUES ('Science');
+
+INSERT INTO Posts (
+    "user_id",
+    "category_id",
+    "title",
+    "publication_date",
+    "image_url",
+    "content",
+    "approved"
+  )
+VALUES (
+    2,
+    1,
+    'Another Post',
+    '2024-03-06',
+    NULL,
+    'Lorem ipsum content for the AGAIN post.',
+    1
+  );
+
+  UPDATE Users SET id = 3 WHERE first_name = "tim";
