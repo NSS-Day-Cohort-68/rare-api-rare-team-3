@@ -4,8 +4,9 @@ from handler import HandleRequests, status
 
 from views import login_user, create_user
 from views import get_categories, create_category
-from views import get_posts, get_posts_by_user, retrieve_post
+from views import get_posts, get_posts_by_user, retrieve_post, delete_post
 from views import get_comments_by_post_id, create_comment
+from views import create_tag
 
 
 class JSONServer(HandleRequests):
@@ -41,19 +42,23 @@ class JSONServer(HandleRequests):
                         "", status.HTTP_404_CLIENT_ERROR_RESOURCE_NOT_FOUND.value
                     )
 
-        elif url["requested_resource"] == "comments":
+        elif url["requested_resource"] == "tags":
             if pk == 0:
-                successfully_posted = create_comment(request_body)
-                if successfully_posted:
-                    return self.response("", status.HTTP_201_SUCCESS_CREATED.value)
+                try:
+                    successfully_posted = create_tag(request_body)
+                    if successfully_posted:
+                        return self.response("", status.HTTP_201_SUCCESS_CREATED.value)
 
-                else:
+                except KeyError:
                     return self.response(
-                        "", status.HTTP_404_CLIENT_ERROR_RESOURCE_NOT_FOUND.value
+                        "Error creating tag: Invalid data format. Need a label",
+                        status.HTTP_400_CLIENT_ERROR_BAD_REQUEST_DATA.value,
                     )
-
         else:
-            return self.response("", status.HTTP_500_SERVER_ERROR.value)
+            return self.response(
+                "Requested resource not found",
+                status.HTTP_404_CLIENT_ERROR_RESOURCE_NOT_FOUND.value,
+            )
 
     def do_GET(self):
         response_body = ""
@@ -84,6 +89,25 @@ class JSONServer(HandleRequests):
             return self.response(
                 "", status.HTTP_404_CLIENT_ERROR_RESOURCE_NOT_FOUND.value
             )
+
+    def do_DELETE(self):
+        """Handle DELETE requests from a client"""
+
+        url = self.parse_url(self.path)
+        pk = url["pk"]
+
+        if url["requested_resource"] == "posts":
+            if pk != 0:
+                successfully_deleted = delete_post(pk)
+                if successfully_deleted:
+                    return self.response(
+                        "", status.HTTP_204_SUCCESS_NO_RESPONSE_BODY.value
+                    )
+
+                return self.response(
+                    "Requested resource not found",
+                    status.HTTP_404_CLIENT_ERROR_RESOURCE_NOT_FOUND.value,
+                )
 
 
 def main():
