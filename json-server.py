@@ -54,6 +54,20 @@ class JSONServer(HandleRequests):
                         "Error creating tag: Invalid data format. Need a label",
                         status.HTTP_400_CLIENT_ERROR_BAD_REQUEST_DATA.value,
                     )
+
+        elif url["requested_resource"] == "comments":
+            if pk == 0:
+                try:
+                    successfully_posted = create_comment(request_body)
+                    if successfully_posted:
+                        return self.response("", status.HTTP_201_SUCCESS_CREATED.value)
+
+                except KeyError:
+                    return self.response(
+                        "Error creating comment: Need comment content",
+                        status.HTTP_400_CLIENT_ERROR_BAD_REQUEST_DATA.value,
+                    )
+
         else:
             return self.response(
                 "Requested resource not found",
