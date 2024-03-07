@@ -68,3 +68,65 @@ def create_user(user):
         id = db_cursor.lastrowid
 
         return json.dumps({"token": id, "valid": True})
+
+
+def get_users():
+    with sqlite3.connect("./db.sqlite3") as conn:
+        conn.row_factory = sqlite3.Row
+        db_cursor = conn.cursor()
+
+        db_cursor.execute(
+            """
+                SELECT 
+                    u.id,
+                    u.first_name,
+                    u.last_name,
+                    u.email,
+                    u.bio,
+                    u.username,
+                    u.password,
+                    u.profile_image_url,
+                    u.created_on,
+                    u.active
+                FROM Users u
+            """
+        )
+        query_results = db_cursor.fetchall()
+
+        users = []
+        for row in query_results:
+            users.append(dict(row))
+
+        return json.dumps(users)
+
+
+def get_user_by_id(pk):
+    with sqlite3.connect("./db.sqlite3") as conn:
+        conn.row_factory = sqlite3.Row
+        db_cursor = conn.cursor()
+
+        db_cursor.execute(
+            """
+                SELECT 
+                    u.id,
+                    u.first_name,
+                    u.last_name,
+                    u.email,
+                    u.bio,
+                    u.username,
+                    u.password,
+                    u.profile_image_url,
+                    u.created_on,
+                    u.active
+                FROM Users u
+                WHERE u.id = ?
+            """,
+            (pk,),
+        )
+        query_results = db_cursor.fetchall()
+
+        users = []
+        for row in query_results:
+            users.append(dict(row))
+
+        return json.dumps(users)
