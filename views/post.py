@@ -254,3 +254,31 @@ def delete_post(pk):
         number_of_rows_deleted = db_cursor.rowcount
 
     return True if number_of_rows_deleted > 0 else False
+
+
+def edit_post(id, post_data):
+    with sqlite3.connect("./db.sqlite3") as conn:
+        db_cursor = conn.cursor()
+
+        db_cursor.execute(
+            """
+            UPDATE Posts 
+                SET
+                    title = ?,
+                    content = ?,
+                    category_id = ?,
+                    image_url = ?
+            WHERE id = ?
+            """,
+            (
+                post_data["title"],
+                post_data["content"],
+                post_data["category_id"],
+                post_data["image_url"],
+                id,
+            ),
+        )
+
+        rows_affected = db_cursor.rowcount
+
+    return True if rows_affected > 0 else False
