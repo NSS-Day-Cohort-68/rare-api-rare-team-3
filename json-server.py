@@ -4,7 +4,14 @@ from handler import HandleRequests, status
 
 from views import login_user, create_user
 from views import get_categories, create_category
-from views import get_posts, get_posts_by_user, retrieve_post, delete_post, edit_post
+from views import (
+    get_posts,
+    get_posts_by_user,
+    retrieve_post,
+    delete_post,
+    create_post,
+    edit_post,
+)
 from views import get_comments_by_post_id
 from views import create_tag
 
@@ -53,6 +60,16 @@ class JSONServer(HandleRequests):
                     return self.response(
                         "Error creating tag: Invalid data format. Need a label",
                         status.HTTP_400_CLIENT_ERROR_BAD_REQUEST_DATA.value,
+                    )
+        elif url["requested_resource"] == "posts":
+            if pk == 0:
+                successfully_posted = create_post(request_body)
+                if successfully_posted:
+                    return self.response("", status.HTTP_201_SUCCESS_CREATED.value)
+
+                else:
+                    return self.response(
+                        "", status.HTTP_404_CLIENT_ERROR_RESOURCE_NOT_FOUND.value
                     )
         else:
             return self.response(
