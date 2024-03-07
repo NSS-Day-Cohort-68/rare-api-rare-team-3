@@ -1,5 +1,38 @@
 import sqlite3
 import json
+from datetime import datetime
+
+
+def create_post(post):
+    """Adds a post to the database when user posts
+
+    Args:
+        user (dictionary): The dictionary passed to the register post request
+
+    Returns:
+        json string: Contains the token of the newly created user
+    """
+    with sqlite3.connect("./db.sqlite3") as conn:
+        conn.row_factory = sqlite3.Row
+        db_cursor = conn.cursor()
+
+        db_cursor.execute(
+            """
+                Insert into Posts (user_id, category_id, title, publication_date, image_url, content, approved) values (?, ?, ?, ?, ?, ?, 1)
+            """,
+            (
+                post["user_id"],
+                post["category_id"],
+                post["title"],
+                datetime.now(),
+                post["image_url"],
+                post["content"],
+            ),
+        )
+
+        rows_affected = db_cursor.rowcount
+
+    return True if rows_affected > 0 else False
 
 
 def retrieve_post(pk):
