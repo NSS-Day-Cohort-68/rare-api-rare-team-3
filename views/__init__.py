@@ -1,4 +1,4 @@
-from .user import login_user, create_user
+from .user import login_user, create_user, get_users
 from .post import (
     get_posts_by_user,
     retrieve_post,
