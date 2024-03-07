@@ -2,9 +2,16 @@ import json
 from http.server import HTTPServer
 from handler import HandleRequests, status
 
-from views import login_user, create_user
+from views import login_user, create_user, get_users
 from views import get_categories, create_category
-from views import get_posts, get_posts_by_user, retrieve_post, delete_post, create_post
+from views import (
+    get_posts,
+    get_posts_by_user,
+    retrieve_post,
+    delete_post,
+    create_post,
+    edit_post,
+)
 from views import get_comments_by_post_id, create_comment
 from views import create_tag, add_tags_to_post
 
@@ -123,6 +130,10 @@ class JSONServer(HandleRequests):
             response_body = get_comments_by_post_id(url)
             return self.response(response_body, status.HTTP_200_SUCCESS.value)
 
+        elif url["requested_resource"] == "users":
+            response_body = get_users()
+            return self.response(response_body, status.HTTP_200_SUCCESS.value)
+
         else:
             return self.response(
                 "", status.HTTP_404_CLIENT_ERROR_RESOURCE_NOT_FOUND.value
@@ -146,6 +157,30 @@ class JSONServer(HandleRequests):
                     "Requested resource not found",
                     status.HTTP_404_CLIENT_ERROR_RESOURCE_NOT_FOUND.value,
                 )
+
+    def do_PUT(self):
+        """Handle PUT requests from a client"""
+
+        # Parse the URL and get the primary key
+        url = self.parse_url(self.path)
+        pk = url["pk"]
+
+        # Get the request body JSON for the new data
+        content_len = int(self.headers.get("content-length", 0))
+        request_body = self.rfile.read(content_len)
+        request_body = json.loads(request_body)
+
+        if url["requested_resource"] == "posts":
+            if pk != 0:
+                successfully_updated = edit_post(pk, request_body)
+                if successfully_updated:
+                    return self.response(
+                        "", status.HTTP_204_SUCCESS_NO_RESPONSE_BODY.value
+                    )
+        return self.response(
+            "Requested resource not found",
+            status.HTTP_404_CLIENT_ERROR_RESOURCE_NOT_FOUND.value,
+        )
 
 
 def main():
