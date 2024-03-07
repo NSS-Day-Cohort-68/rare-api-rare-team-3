@@ -1,5 +1,6 @@
 import sqlite3
 import json
+from datetime import datetime
 
 
 def create_post(post):
@@ -23,7 +24,7 @@ def create_post(post):
                 post["user_id"],
                 post["category_id"],
                 post["title"],
-                post["publication_date"],
+                datetime.now(),
                 post["image_url"],
                 post["content"],
             ),
