@@ -6,7 +6,7 @@ from views import login_user, create_user, get_users
 from views import get_categories, create_category
 from views import get_posts, get_posts_by_user, retrieve_post, delete_post, create_post
 from views import get_comments_by_post_id, create_comment
-from views import create_tag
+from views import create_tag, get_tags
 
 
 class JSONServer(HandleRequests):
@@ -111,6 +111,10 @@ class JSONServer(HandleRequests):
 
         elif url["requested_resource"] == "users":
             response_body = get_users()
+            return self.response(response_body, status.HTTP_200_SUCCESS.value)
+
+        elif url["requested_resource"] == "tags":
+            response_body = get_tags()
             return self.response(response_body, status.HTTP_200_SUCCESS.value)
 
         else:
