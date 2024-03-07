@@ -6,7 +6,7 @@ from views import login_user, create_user
 from views import get_categories, create_category
 from views import get_posts, get_posts_by_user, retrieve_post, delete_post, create_post
 from views import get_comments_by_post_id, create_comment
-from views import create_tag
+from views import create_tag, add_tags_to_post
 
 
 class JSONServer(HandleRequests):
@@ -54,6 +54,20 @@ class JSONServer(HandleRequests):
                         "Error creating tag: Invalid data format. Need a label",
                         status.HTTP_400_CLIENT_ERROR_BAD_REQUEST_DATA.value,
                     )
+
+        elif url["requested_resource"] == "post_tags":
+            if pk == 0:
+                try:
+                    successfully_posted = add_tags_to_post(request_body)
+                    if successfully_posted:
+                        return self.response("", status.HTTP_201_SUCCESS_CREATED.value)
+
+                except KeyError:
+                    return self.response(
+                        "Error adding tag(s) to post: Invalid data format. Need a post_id and tag_id",
+                        status.HTTP_400_CLIENT_ERROR_BAD_REQUEST_DATA.value,
+                    )
+
         elif url["requested_resource"] == "posts":
             if pk == 0:
                 successfully_posted = create_post(request_body)
