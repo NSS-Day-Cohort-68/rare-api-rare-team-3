@@ -12,7 +12,7 @@ from views import (
     create_post,
     edit_post,
 )
-from views import get_comments_by_post_id
+from views import get_comments_by_post_id, create_comment
 from views import create_tag
 
 
@@ -71,6 +71,20 @@ class JSONServer(HandleRequests):
                     return self.response(
                         "", status.HTTP_404_CLIENT_ERROR_RESOURCE_NOT_FOUND.value
                     )
+
+        elif url["requested_resource"] == "comments":
+            if pk == 0:
+                try:
+                    successfully_posted = create_comment(request_body)
+                    if successfully_posted:
+                        return self.response("", status.HTTP_201_SUCCESS_CREATED.value)
+
+                except KeyError:
+                    return self.response(
+                        "Error creating comment: Need comment content",
+                        status.HTTP_400_CLIENT_ERROR_BAD_REQUEST_DATA.value,
+                    )
+
         else:
             return self.response(
                 "Requested resource not found",
