@@ -247,3 +247,10 @@ VALUES (
   );
 
   UPDATE Users SET id = 3 WHERE first_name = "tim";
+
+  INSERT INTO "Comments" ("post_id", "author_id", "content")
+  VALUES (1, 1, "This is such a funny comment!");
+  INSERT INTO "Comments" ("post_id", "author_id", "content")
+  VALUES (2, 2, "BLAH BLAH BLAH");
+  INSERT INTO "Comments" ("post_id", "author_id", "content")
+  VALUES (1, 1, "test test test");
