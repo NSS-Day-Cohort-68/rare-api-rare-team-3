@@ -98,6 +98,10 @@ class JSONServer(HandleRequests):
                         "Error creating comment: Need comment content",
                         status.HTTP_400_CLIENT_ERROR_BAD_REQUEST_DATA.value,
                     )
+        elif url["requested_resource"] == "login":
+            return self.response(
+                login_user(request_body), status.HTTP_200_SUCCESS.value
+            )
 
         else:
             return self.response(
