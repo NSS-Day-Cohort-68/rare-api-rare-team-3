@@ -51,16 +51,18 @@ def create_user(user):
 
         db_cursor.execute(
             """
-                Insert into Users (first_name, last_name, username, email, password, bio, created_on, active) values (?, ?, ?, ?, ?, ?, ?, 1)
+                Insert into Users (first_name, last_name, email, bio, username, password, profile_image_url, created_on, active) values (?, ?, ?, ?, ?, ?, ?, ?, ?)
             """,
             (
                 user["first_name"],
                 user["last_name"],
                 user["username"],
                 user["email"],
-                user["password"],
-                user["bio"],
+                user.get("password", None),
+                user.get("bio", None),
+                user("profile_img_url", None),
                 datetime.now(),
+                user("active", 1),
             ),
         )
 
