@@ -1,4 +1,10 @@
-from .user import login_user, create_user, get_users, get_user_by_id
+from .user import (
+    login_user,
+    create_user,
+    get_users,
+    get_user_by_token,
+    get_user_by_email,
+)
 from .post import (
     get_posts_by_user,
     retrieve_post,
