@@ -2,7 +2,13 @@ import json
 from http.server import HTTPServer
 from handler import HandleRequests, status
 
-from views import login_user, create_user, get_users, get_user_by_id
+from views import (
+    login_user,
+    create_user,
+    get_users,
+    get_user_by_token,
+    get_user_by_email,
+)
 from views import get_categories, create_category
 from views import (
     get_posts,
@@ -135,8 +141,19 @@ class JSONServer(HandleRequests):
             return self.response(response_body, status.HTTP_200_SUCCESS.value)
 
         elif url["requested_resource"] == "users":
+            if "email" in url["query_params"]:
+                try:
+                    response_body = get_user_by_email(url["query_params"]["email"][0])
+                    return self.response(response_body, status.HTTP_200_SUCCESS.value)
+
+                except TypeError:
+                    return self.response(
+                        "Email does not exist in database",
+                        status.HTTP_404_CLIENT_ERROR_RESOURCE_NOT_FOUND.value,
+                    )
+
             if url["pk"] != 0:
-                response_body = get_user_by_id(url["pk"])
+                response_body = get_user_by_token(url["pk"])
                 return self.response(response_body, status.HTTP_200_SUCCESS.value)
             response_body = get_users()
             return self.response(response_body, status.HTTP_200_SUCCESS.value)
