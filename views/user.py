@@ -60,9 +60,9 @@ def create_user(user):
                 user["email"],
                 user.get("password", None),
                 user.get("bio", None),
-                user("profile_img_url", None),
+                user.get("profile_img_url", None),
                 datetime.now(),
-                user("active", 1),
+                user.get("active", 1),
             ),
         )
 
