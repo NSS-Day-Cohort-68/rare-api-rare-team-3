@@ -124,13 +124,9 @@ def get_user_by_token(pk):
             """,
             (pk,),
         )
-        query_results = db_cursor.fetchall()
+        query_results = db_cursor.fetchone()
 
-        users = []
-        for row in query_results:
-            users.append(dict(row))
-
-        return json.dumps(users)
+        return json.dumps(dict(query_results))
 
 
 def get_user_by_email(email):
