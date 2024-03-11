@@ -37,7 +37,10 @@ class JSONServer(HandleRequests):
             if pk == 0:
                 successfully_posted = create_user(request_body)
                 if successfully_posted:
-                    return self.response("", status.HTTP_201_SUCCESS_CREATED.value)
+                    return self.response(
+                        successfully_posted,
+                        status.HTTP_201_SUCCESS_CREATED.value,
+                    )
 
                 else:
                     return self.response(
@@ -142,14 +145,13 @@ class JSONServer(HandleRequests):
 
         elif url["requested_resource"] == "users":
             if "email" in url["query_params"]:
-                try:
-                    response_body = get_user_by_email(url["query_params"]["email"][0])
+                response_body = get_user_by_email(url["query_params"]["email"][0])
+                if response_body:
                     return self.response(response_body, status.HTTP_200_SUCCESS.value)
-
-                except TypeError:
+                else:
                     return self.response(
-                        "Email does not exist in database",
-                        status.HTTP_404_CLIENT_ERROR_RESOURCE_NOT_FOUND.value,
+                        json.dumps({}),
+                        status.HTTP_200_SUCCESS.value,
                     )
 
             if url["pk"] != 0:
