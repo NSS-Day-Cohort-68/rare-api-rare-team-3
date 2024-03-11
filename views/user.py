@@ -56,10 +56,10 @@ def create_user(user):
             (
                 user["first_name"],
                 user["last_name"],
-                user["username"],
                 user["email"],
-                user.get("password", None),
                 user.get("bio", None),
+                user["username"],
+                user.get("password", None),
                 user.get("profile_img_url", None),
                 datetime.now(),
                 user.get("active", 1),
@@ -158,4 +158,4 @@ def get_user_by_email(email):
         )
         query_results = db_cursor.fetchone()
 
-        return json.dumps(dict(query_results))
+        return json.dumps(dict(query_results)) if query_results else None
