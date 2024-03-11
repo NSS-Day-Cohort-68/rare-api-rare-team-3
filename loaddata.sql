@@ -255,4 +255,5 @@ VALUES (
   INSERT INTO "Comments" ("post_id", "author_id", "content")
   VALUES (1, 1, "test test test");
 
-DELETE FROM Users WHERE id = 9;
+DELETE FROM Users WHERE id = 7;
+DELETE FROM Users WHERE id = 8;

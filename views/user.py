@@ -158,4 +158,4 @@ def get_user_by_email(email):
         )
         query_results = db_cursor.fetchone()
 
-        return json.dumps(dict(query_results)) if query_results else None
+        return json.dumps(dict(query_results))
