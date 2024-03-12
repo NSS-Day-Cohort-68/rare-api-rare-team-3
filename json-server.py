@@ -88,7 +88,7 @@ class JSONServer(HandleRequests):
             if pk == 0:
                 successfully_posted = create_post(request_body)
                 if successfully_posted:
-                    return self.response("", status.HTTP_201_SUCCESS_CREATED.value)
+                    return self.response(successfully_posted, status.HTTP_201_SUCCESS_CREATED.value)
 
                 else:
                     return self.response(
