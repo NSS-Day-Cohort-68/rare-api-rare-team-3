@@ -30,9 +30,13 @@ def create_post(post):
             ),
         )
 
-        rows_affected = db_cursor.rowcount
+        # rows_affected = db_cursor.rowcount
 
-    return True if rows_affected > 0 else False
+        # return True if rows_affected > 0 else False
+
+        new_post_id = db_cursor.lastrowid
+
+        return json.dumps({"id": new_post_id, "valid": True})
 
 
 def retrieve_post(pk):
@@ -99,7 +103,7 @@ def retrieve_post(pk):
             }
             serialized_post = json.dumps(post)
         else:
-            serialized_post = json.dumps({})  
+            serialized_post = json.dumps({})
 
     return serialized_post
 
