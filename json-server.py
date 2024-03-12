@@ -9,7 +9,7 @@ from views import (
     get_user_by_token,
     get_user_by_email,
 )
-from views import get_categories, create_category, delete_category
+from views import get_categories, create_category, delete_category, edit_category
 from views import (
     get_posts,
     get_posts_by_user,
@@ -221,10 +221,20 @@ class JSONServer(HandleRequests):
                     return self.response(
                         "", status.HTTP_204_SUCCESS_NO_RESPONSE_BODY.value
                     )
-        return self.response(
-            "Requested resource not found",
-            status.HTTP_404_CLIENT_ERROR_RESOURCE_NOT_FOUND.value,
-        )
+
+        elif url["requested_resource"] == "categories":
+            if pk != 0:
+                successfully_updated = edit_category(pk, request_body)
+                if successfully_updated:
+                    return self.response(
+                        "", status.HTTP_204_SUCCESS_NO_RESPONSE_BODY.value
+                    )
+
+        else:
+            return self.response(
+                "Requested resource not found",
+                status.HTTP_404_CLIENT_ERROR_RESOURCE_NOT_FOUND.value,
+            )
 
 
 def main():

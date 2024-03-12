@@ -57,3 +57,23 @@ def delete_category(pk):
             (pk,),
         )
         return True if db_cursor.rowcount > 0 else False
+
+
+def edit_category(pk, category_data):
+    with sqlite3.connect("./db.sqlite3") as conn:
+        db_cursor = conn.cursor()
+
+        db_cursor.execute(
+            """
+                UPDATE Categories
+                    SET
+                        label = ?
+                WHERE id = ?
+            """,
+            (
+                category_data["label"],
+                pk,
+            ),
+        )
+
+        return True if db_cursor.rowcount > 0 else False
