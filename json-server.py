@@ -19,7 +19,7 @@ from views import (
     edit_post,
 )
 from views import get_comments_by_post_id, create_comment
-from views import create_tag, add_tags_to_post, get_tags
+from views import create_tag, add_tags_to_post, get_tags, delete_tag
 
 
 class JSONServer(HandleRequests):
@@ -88,7 +88,9 @@ class JSONServer(HandleRequests):
             if pk == 0:
                 successfully_posted = create_post(request_body)
                 if successfully_posted:
-                    return self.response(successfully_posted, status.HTTP_201_SUCCESS_CREATED.value)
+                    return self.response(
+                        successfully_posted, status.HTTP_201_SUCCESS_CREATED.value
+                    )
 
                 else:
                     return self.response(
@@ -195,6 +197,19 @@ class JSONServer(HandleRequests):
                     return self.response(
                         "",
                         status.HTTP_204_SUCCESS_NO_RESPONSE_BODY.value,
+                    )
+
+                return self.response(
+                    "Requested resource not found",
+                    status.HTTP_404_CLIENT_ERROR_RESOURCE_NOT_FOUND.value,
+                )
+
+        elif url["requested_resource"] == "tags":
+            if pk != 0:
+                successfully_deleted = delete_tag(pk)
+                if successfully_deleted:
+                    return self.response(
+                        "", status.HTTP_204_SUCCESS_NO_RESPONSE_BODY.value
                     )
 
                 return self.response(

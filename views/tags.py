@@ -58,3 +58,17 @@ def get_tags():
             tags.append(dict(row))
 
         return json.dumps(tags)
+
+
+def delete_tag(pk):
+    with sqlite3.connect("./db.sqlite3") as conn:
+        conn.row_factory = sqlite3.Row
+        db_cursor = conn.cursor()
+
+        db_cursor.execute(
+            """
+                DELETE FROM Tags WHERE id = ?
+            """,
+            (pk,),
+        )
+        return True if db_cursor.rowcount > 0 else False
