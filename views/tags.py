@@ -87,7 +87,7 @@ def edit_tag(pk, tag_data):
                 WHERE id = ?
             """,
             (
-                tag_data,
+                tag_data["label"],
                 pk,
             ),
         )
