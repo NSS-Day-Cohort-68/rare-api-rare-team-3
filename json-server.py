@@ -19,7 +19,14 @@ from views import (
     edit_post,
 )
 from views import get_comments_by_post_id, create_comment
-from views import create_tag, add_tags_to_post, get_tags, delete_tag, edit_tag
+from views import (
+    create_tag,
+    add_tags_to_post,
+    get_tags,
+    delete_tag,
+    edit_tag,
+    get_tags_by_post,
+)
 
 
 class JSONServer(HandleRequests):
@@ -165,6 +172,12 @@ class JSONServer(HandleRequests):
         elif url["requested_resource"] == "tags":
             response_body = get_tags()
             return self.response(response_body, status.HTTP_200_SUCCESS.value)
+
+        elif url["requested_resource"] == "post_tags":
+            if "post_id" in url.get("query_params"):
+                post_id = int(url["query_params"]["post_id"][0])
+                tags_by_post = get_tags_by_post(post_id)
+                return self.response(tags_by_post, status.HTTP_200_SUCCESS.value)
 
         else:
             return self.response(
