@@ -20,7 +20,8 @@ def get_comments_by_post_id(url):
                         u.first_name,
                         u.last_name,
                         u.username,
-                        c.content
+                        c.content,
+                        c.creation_datetime
                     FROM Comments c
                         JOIN Users u ON user_id = c.author_id
                     WHERE c.post_id = ?
@@ -43,7 +44,7 @@ def get_comments_by_post_id(url):
                     "author_id": row["author_id"],
                     "author": author,
                     "content": row["content"],
-                    "creation_datetime": row["creation_datetime"],
+                    "creation_datetime": row["creation_datetime"]
                 }
                 comments.append(comment)
 
