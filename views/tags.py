@@ -38,6 +38,19 @@ def add_tags_to_post(post_tags):
     return True if new_tag_count > 0 else False
 
 
+def delete_tags_from_a_post(tagId):
+    with sqlite3.connect("./db.sqlite3") as conn:
+        conn.row_factory = sqlite3.Row
+        db_cursor = conn.cursor()
+        db_cursor.execute(
+            """
+                DELETE FROM PostTags WHERE id = ?
+            """,
+            (tagId,),
+        )
+    return True if db_cursor.rowcount > 0 else False
+
+
 def get_tags():
     with sqlite3.connect("./db.sqlite3") as conn:
         conn.row_factory = sqlite3.Row

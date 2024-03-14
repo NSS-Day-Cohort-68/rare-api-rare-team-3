@@ -140,6 +140,7 @@ VALUES (
     0
   );
 
+
 INSERT INTO Posts (
     "user_id",
     "category_id",

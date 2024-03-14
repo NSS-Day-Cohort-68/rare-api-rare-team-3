@@ -26,6 +26,7 @@ from views import (
     delete_tag,
     edit_tag,
     get_tags_by_post,
+    delete_tags_from_a_post,
 )
 
 
@@ -225,6 +226,17 @@ class JSONServer(HandleRequests):
                         "", status.HTTP_204_SUCCESS_NO_RESPONSE_BODY.value
                     )
 
+                return self.response(
+                    "Requested resource not found",
+                    status.HTTP_404_CLIENT_ERROR_RESOURCE_NOT_FOUND.value,
+                )
+        elif url["requested_resource"] == "post_tags_delete":
+            if pk != 0:
+                successfully_deleted = delete_tags_from_a_post(pk)
+                if successfully_deleted:
+                    # Access the integer value of the status object
+                    status_code = status.HTTP_204_SUCCESS_NO_RESPONSE_BODY.value
+                    return self.response("", status_code)
                 return self.response(
                     "Requested resource not found",
                     status.HTTP_404_CLIENT_ERROR_RESOURCE_NOT_FOUND.value,
