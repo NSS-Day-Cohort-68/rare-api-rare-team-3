@@ -18,7 +18,7 @@ from views import (
     create_post,
     edit_post,
 )
-from views import get_comments_by_post_id, create_comment
+from views import get_comments_by_post_id, create_comment, delete_comment
 from views import (
     create_tag,
     add_tags_to_post,
@@ -237,6 +237,19 @@ class JSONServer(HandleRequests):
                     # Access the integer value of the status object
                     status_code = status.HTTP_204_SUCCESS_NO_RESPONSE_BODY.value
                     return self.response("", status_code)
+                return self.response(
+                    "Requested resource not found",
+                    status.HTTP_404_CLIENT_ERROR_RESOURCE_NOT_FOUND.value,
+                )
+
+        elif url["requested_resource"] == "comments":
+            if pk != 0:
+                successfully_deleted = delete_comment(pk)
+                if successfully_deleted:
+                    return self.response(
+                        "", status.HTTP_204_SUCCESS_NO_RESPONSE_BODY.value
+                    )
+
                 return self.response(
                     "Requested resource not found",
                     status.HTTP_404_CLIENT_ERROR_RESOURCE_NOT_FOUND.value,
