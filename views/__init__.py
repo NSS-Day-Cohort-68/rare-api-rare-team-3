@@ -21,5 +21,7 @@ from .tags import (
     get_tags,
     delete_tag,
     edit_tag,
-    get_tags_by_post
+    get_tags_by_post,
+    delete_tags_from_a_post,
+    # delete_tag_from_a_post,
 )
