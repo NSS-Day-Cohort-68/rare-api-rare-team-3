@@ -140,6 +140,7 @@ VALUES (
     0
   );
 
+
 INSERT INTO Posts (
     "user_id",
     "category_id",
@@ -420,3 +421,4 @@ INSERT INTO Tags ('label') VALUES ('Python');
 INSERT INTO Tags ('label') VALUES ('Machine Learning');
 INSERT INTO Tags ('label') VALUES ('Data Science');
 INSERT INTO Tags ('label') VALUES ('Artificial Intelligence');
+
