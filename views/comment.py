@@ -60,7 +60,7 @@ def create_comment(comment_data):
                         post_id,
                         author_id,
                         content,
-                        creation_date
+                        creation_datetime
                     )
                         VALUES
                     (
