@@ -1,5 +1,6 @@
 import sqlite3
 import json
+from datetime import datetime
 
 
 def get_comments_by_post_id(url):
@@ -60,10 +61,12 @@ def create_comment(comment_data):
                     (
                         post_id,
                         author_id,
-                        content
+                        content,
+                        creation_datetime
                     )
                         VALUES
                     (
+                        ?,
                         ?,
                         ?,
                         ?
@@ -73,6 +76,7 @@ def create_comment(comment_data):
                 comment_data["post_id"],
                 comment_data["author_id"],
                 comment_data["content"],
+                datetime.now(),
             ),
         )
 
