@@ -43,6 +43,7 @@ CREATE TABLE "Comments" (
   "post_id" INTEGER,
   "author_id" INTEGER,
   "content" varchar,
+ "creation_datetime" date,
   FOREIGN KEY(`post_id`) REFERENCES `Posts`(`id`),
   FOREIGN KEY(`author_id`) REFERENCES `Users`(`id`)
 );
@@ -75,13 +76,13 @@ CREATE TABLE "Categories" (
   "id" INTEGER PRIMARY KEY AUTOINCREMENT,
   "label" varchar
 );
-INSERT INTO Categories ('label')
-VALUES ('News');
-INSERT INTO Tags ('label')
-VALUES ('JavaScript');
+
+
 INSERT INTO Reactions ('label', 'image_url')
 VALUES ('happy', 'https://pngtree.com/so/happy');
--- Add posts to test get functionailty
+
+
+-- Add posts to database
 INSERT INTO Posts (
     "user_id",
     "category_id",
@@ -94,12 +95,13 @@ INSERT INTO Posts (
 VALUES (
     2,
     2,
-    'First Post',
-    '2024-03-05',
+    'The Impact of Artificial Intelligence on Healthcare',
+    '2024-03-11 17:15:27.051853',
     NULL,
-    'Lorem ipsum content for the first post.',
+    'Artificial intelligence (AI) is revolutionizing the healthcare industry...',
     1
   );
+
 INSERT INTO Posts (
     "user_id",
     "category_id",
@@ -112,12 +114,13 @@ INSERT INTO Posts (
 VALUES (
     3,
     1,
-    'Second Post',
-    '2024-03-06',
+    'Climate Change: The Urgency for Global Action',
+    '2024-03-11 17:15:27.051853',
     NULL,
-    'Lorem ipsum content for the second post.',
+    'Climate change is one of the most pressing challenges facing humanity...',
     1
   );
+
 INSERT INTO Posts (
     "user_id",
     "category_id",
@@ -130,12 +133,13 @@ INSERT INTO Posts (
 VALUES (
     1,
     3,
-    'Third Post',
-    '2024-03-07',
+    'The Future of Renewable Energy Sources',
+    '2024-03-11 17:15:27.051853',
     NULL,
-    'Lorem ipsum content for the third post.',
+    'Renewable energy sources such as solar, wind, and hydroelectric power...',
     0
   );
+
 INSERT INTO Posts (
     "user_id",
     "category_id",
@@ -146,16 +150,112 @@ INSERT INTO Posts (
     "approved"
   )
 VALUES (
-    1,
+    6,
     2,
-    'Third Post',
-    '2024-03-07',
+    'Exploring the Potential of Space Tourism',
+    '2024-03-11 17:15:27.051853',
     NULL,
-    'Lorem ipsum content for the fourth post.',
+    'Space tourism, once a distant dream, is now becoming a tangible reality...',
     1
   );
--- Add users to join in get Posts fetch
-INSERT INTO "Users" (
+
+INSERT INTO Posts (
+    "user_id",
+    "category_id",
+    "title",
+    "publication_date",
+    "image_url",
+    "content",
+    "approved"
+)
+VALUES (
+    2,
+    1,
+    'The Importance of Regular Exercise',
+    '2024-03-11 17:15:27.051853',
+    NULL,
+    'Regular exercise has numerous benefits for both physical and mental health...',
+    1
+);
+
+INSERT INTO Posts (
+    "user_id",
+    "category_id",
+    "title",
+    "publication_date",
+    "image_url",
+    "content",
+    "approved"
+)
+VALUES (
+    3,
+    3,
+    'Advancements in Artificial Neural Networks',
+    '2024-03-11 17:15:27.051853',
+    NULL,
+    'Artificial neural networks have seen significant advancements...',
+    1
+);
+
+INSERT INTO Posts (
+    "user_id",
+    "category_id",
+    "title",
+    "publication_date",
+    "image_url",
+    "content",
+    "approved"
+)
+VALUES (
+    4,
+    2,
+    'The Rise of E-Sports',
+    '2024-03-11 17:15:27.051853',
+    NULL,
+    'E-Sports, or electronic sports, have become increasingly popular...',
+    1
+);
+
+INSERT INTO Posts (
+    "user_id",
+    "category_id",
+    "title",
+    "publication_date",
+    "image_url",
+    "content",
+    "approved"
+)
+VALUES (
+    3,
+    1,
+    'The Future of Electric Vehicles',
+    '2024-03-11 17:15:27.051853',
+    NULL,
+    'Electric vehicles are poised to revolutionize the automotive industry...',
+    1
+);
+
+INSERT INTO Posts (
+    "user_id",
+    "category_id",
+    "title",
+    "publication_date",
+    "image_url",
+    "content",
+    "approved"
+)
+VALUES (
+    2,
+    3,
+    'The Impact of Climate Change on Biodiversity',
+    '2024-03-11 17:15:27.051853',
+    NULL,
+    'Climate change poses a significant threat to global biodiversity...',
+    1
+);
+
+-- Add users to database
+INSERT INTO Users (
     "first_name",
     "last_name",
     "email",
@@ -174,10 +274,11 @@ VALUES (
     'john_doe',
     'hashed_password_1',
     NULL,
-    '2024-03-05',
+    '2024-03-11 17:15:27.051853',
     1
   );
-INSERT INTO "Users" (
+
+INSERT INTO Users (
     "first_name",
     "last_name",
     "email",
@@ -196,10 +297,11 @@ VALUES (
     'jane_smith',
     'hashed_password_2',
     NULL,
-    '2024-03-06',
+    '2024-03-11 17:15:27.051853',
     1
   );
-INSERT INTO "Users" (
+
+INSERT INTO Users (
     "first_name",
     "last_name",
     "email",
@@ -218,41 +320,103 @@ VALUES (
     'bob_johnson',
     'hashed_password_3',
     NULL,
-    '2024-03-07',
+    '2024-03-11 17:15:27.051853',
     0
   );
--- Add categories to join in get Posts fetch
-INSERT INTO "Categories" ("label")
+
+INSERT INTO Users (
+    "first_name",
+    "last_name",
+    "email",
+    "bio",
+    "username",
+    "password",
+    "profile_image_url",
+    "created_on",
+    "active"
+)
+VALUES (
+    'Emily',
+    'Jones',
+    'emily@example.com',
+    'Graphic Designer',
+    'emily_jones',
+    'hashed_password_4',
+    NULL,
+    '2024-03-11 17:15:27.051853',
+    1
+);
+
+INSERT INTO Users (
+    "first_name",
+    "last_name",
+    "email",
+    "bio",
+    "username",
+    "password",
+    "profile_image_url",
+    "created_on",
+    "active"
+)
+VALUES (
+    'Michael',
+    'Brown',
+    'michael@example.com',
+    'Marketing Manager',
+    'michael_brown',
+    'hashed_password_5',
+    NULL,
+    '2024-03-11 17:15:27.051853',
+    1
+);
+
+INSERT INTO Users (
+    "first_name",
+    "last_name",
+    "email",
+    "bio",
+    "username",
+    "password",
+    "profile_image_url",
+    "created_on",
+    "active"
+)
+VALUES (
+    'Sarah',
+    'Clark',
+    'sarah@example.com',
+    'UX/UI Designer',
+    'sarah_clark',
+    'hashed_password_6',
+    NULL,
+    '2024-03-11 17:15:27.051853',
+    0
+);
+
+-- Add starter categories to database
+INSERT INTO Categories ('label')
+VALUES ('News');
+
+INSERT INTO Categories ("label")
 VALUES ('Sports');
-INSERT INTO "Categories" ("label")
+
+INSERT INTO Categories ("label")
 VALUES ('Science');
 
-INSERT INTO Posts (
-    "user_id",
-    "category_id",
-    "title",
-    "publication_date",
-    "image_url",
-    "content",
-    "approved"
-  )
-VALUES (
-    2,
-    1,
-    'Another Post',
-    '2024-03-06',
-    NULL,
-    'Lorem ipsum content for the AGAIN post.',
-    1
-  );
+  
+-- Add starter comments to database
+INSERT INTO Comments ("post_id", "author_id", "content", "creation_datetime")
+VALUES (1, 1, "This is such a funny comment!", '2024-03-11 17:15:27.051853');
 
-  UPDATE Users SET id = 3 WHERE first_name = "tim";
+INSERT INTO Comments ("post_id", "author_id", "content", "creation_datetime")
+VALUES (2, 2, "BLAH BLAH BLAH", '2024-03-11 17:15:27.051853');
 
-  INSERT INTO "Comments" ("post_id", "author_id", "content")
-  VALUES (1, 1, "This is such a funny comment!");
-  INSERT INTO "Comments" ("post_id", "author_id", "content")
-  VALUES (2, 2, "BLAH BLAH BLAH");
-  INSERT INTO "Comments" ("post_id", "author_id", "content")
-  VALUES (1, 1, "test test test");
+INSERT INTO Comments ("post_id", "author_id", "content", "creation_datetime")
+VALUES (1, 1, "test test test", '2024-03-11 17:15:27.051853');
 
-DELETE FROM Users WHERE id = 28;
+-- Add starter tags to database
+INSERT INTO Tags ('label') VALUES ('JavaScript');
+INSERT INTO Tags ('label') VALUES ('Python');
+INSERT INTO Tags ('label') VALUES ('Machine Learning');
+INSERT INTO Tags ('label') VALUES ('Data Science');
+INSERT INTO Tags ('label') VALUES ('Artificial Intelligence');
