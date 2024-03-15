@@ -30,9 +30,13 @@ def create_post(post):
             ),
         )
 
-        rows_affected = db_cursor.rowcount
+        # rows_affected = db_cursor.rowcount
 
-    return True if rows_affected > 0 else False
+        # return True if rows_affected > 0 else False
+
+        new_post_id = db_cursor.lastrowid
+
+        return json.dumps({"id": new_post_id, "valid": True})
 
 
 def retrieve_post(pk):
@@ -51,16 +55,55 @@ def retrieve_post(pk):
             p.title,
             p.publication_date,
             p.image_url,
-            p.content
+            p.content,
+            p.approved,
+            u.id AS u_id,
+            u.first_name,
+            u.last_name,
+            u.email,
+            u.bio,
+            u.username,
+            u.password,
+            u.profile_image_url,
+            u.created_on,
+            u.active,
+            c.id AS cat_id,
+            c.label
         FROM Posts p
+        JOIN Users u
+                ON u_id = p.user_id
+        JOIN Categories c
+                ON cat_id = p.category_id
         WHERE p.id = ?
         """,
             (pk,),
         )
-        query_results = db_cursor.fetchone()
+        row = db_cursor.fetchone()
 
-        # Serialize Python list to JSON encoded string
-        serialized_post = json.dumps(dict(query_results))
+        if row:
+            user = {
+                "u_id": row["u_id"],
+                "first_name": row["first_name"],
+                "last_name": row["last_name"],
+                "username": row["username"],
+                "profile_image_url": row["profile_image_url"],
+            }
+            category = {"label": row["label"]}
+            post = {
+                "id": row["id"],
+                "user_id": row["user_id"],
+                "user": user,
+                "category_id": row["category_id"],
+                "category": category,
+                "title": row["title"],
+                "publication_date": row["publication_date"],
+                "image_url": row["image_url"],
+                "content": row["content"],
+                "approved": row["approved"],
+            }
+            serialized_post = json.dumps(post)
+        else:
+            serialized_post = json.dumps({})
 
     return serialized_post
 
