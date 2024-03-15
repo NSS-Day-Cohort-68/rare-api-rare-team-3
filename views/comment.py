@@ -49,6 +49,28 @@ def get_comments_by_post_id(url):
                 comments.append(comment)
 
             return json.dumps(comments)
+        
+def get_comments_by_id(pk):
+    with sqlite3.connect("./db.sqlite3") as conn:
+        conn.row_factory = sqlite3.Row
+        db_cursor = conn.cursor()
+
+        db_cursor.execute(
+            """
+                SELECT
+                    c.id,
+                    c.post_id,
+                    c.author_id,
+                    c.content,
+                    c.creation_datetime
+                FROM Comments c
+                WHERE c.post_id = ?
+            """,
+            (pk,),
+        )
+        query_results = db_cursor.fetchone()
+
+        return json.dumps(dict(query_results))
 
 
 def create_comment(comment_data):
@@ -97,3 +119,24 @@ def delete_comment(pk):
         )
         
         return True if db_cursor.rowcount > 0 else False
+    
+def update_comment(id, comment):
+    with sqlite3.connect("./db.sqlite3") as conn:
+        db_cursor = conn.cursor()
+
+        db_cursor.execute(
+            """
+            UPDATE Comments 
+                SET
+                    content = ?,
+            WHERE id = ?
+            """,
+            (
+                comment["content"],
+                id,
+            ),
+        )
+
+        rows_affected = db_cursor.rowcount
+
+    return True if rows_affected > 0 else False
