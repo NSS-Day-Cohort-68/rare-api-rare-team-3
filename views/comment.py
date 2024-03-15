@@ -64,7 +64,7 @@ def get_comments_by_id(pk):
                     c.content,
                     c.creation_datetime
                 FROM Comments c
-                WHERE c.post_id = ?
+                WHERE c.id = ?
             """,
             (pk,),
         )
@@ -127,8 +127,8 @@ def update_comment(id, comment):
         db_cursor.execute(
             """
             UPDATE Comments 
-                SET
-                    content = ?,
+            SET                
+                content = ?
             WHERE id = ?
             """,
             (

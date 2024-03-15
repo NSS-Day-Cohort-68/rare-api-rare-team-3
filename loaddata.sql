@@ -415,6 +415,9 @@ VALUES (2, 2, "BLAH BLAH BLAH", '2024-03-11 17:15:27.051853');
 INSERT INTO Comments ("post_id", "author_id", "content", "creation_datetime")
 VALUES (1, 1, "test test test", '2024-03-11 17:15:27.051853');
 
+INSERT INTO Comments ("post_id", "author_id", "content", "creation_datetime")
+VALUES (3, 1, "gotta pay the troll toll", '2024-03-11 17:15:27.051853');
+
 -- Add starter tags to database
 INSERT INTO Tags ('label') VALUES ('JavaScript');
 INSERT INTO Tags ('label') VALUES ('Python');
