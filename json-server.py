@@ -18,7 +18,7 @@ from views import (
     create_post,
     edit_post,
 )
-from views import get_comments_by_post_id, create_comment, delete_comment
+from views import get_comments_by_post_id, create_comment, delete_comment, get_comments_by_id, update_comment
 from views import (
     create_tag,
     add_tags_to_post,
@@ -150,8 +150,12 @@ class JSONServer(HandleRequests):
             return self.response(response_body, status.HTTP_200_SUCCESS.value)
 
         elif url["requested_resource"] == "comments":
-            response_body = get_comments_by_post_id(url)
-            return self.response(response_body, status.HTTP_200_SUCCESS.value)
+                if url["pk"] != 0:
+                    response_body = get_comments_by_id(url["pk"])
+                    return self.response(response_body, status.HTTP_200_SUCCESS.value)
+                
+                response_body = get_comments_by_post_id(url)
+                return self.response(response_body, status.HTTP_200_SUCCESS.value)
 
         elif url["requested_resource"] == "users":
             if "email" in url["query_params"]:
@@ -286,6 +290,13 @@ class JSONServer(HandleRequests):
         elif url["requested_resource"] == "tags":
             if pk != 0:
                 successfully_updated = edit_tag(pk, request_body)
+                if successfully_updated:
+                    return self.response(
+                        "", status.HTTP_204_SUCCESS_NO_RESPONSE_BODY.value
+                    )
+        elif url["requested_resource"] == "comments":
+            if pk != 0:
+                successfully_updated = update_comment(pk, request_body)
                 if successfully_updated:
                     return self.response(
                         "", status.HTTP_204_SUCCESS_NO_RESPONSE_BODY.value
